@@ -1,5 +1,6 @@
 package org.jc.jcutils;
 
+import org.jc.jcutils.utils.ByteUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -12,6 +13,32 @@ public class ByteUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         System.out.println();
+//        byteDisplay();
+
+        //协议测试
+
+        byte[] rule1_1=new byte[6];
+        rule1_1[0]=1;
+
+        rule1_1[1]=1;
+
+        rule1_1=ByteUtils.int16s2byteArrays(4518, rule1_1, 2);
+        rule1_1=ByteUtils.int16s2byteArrays(6536, rule1_1, 4);
+        System.out.println(ByteUtils.byteArrays2int16s(rule1_1, 2));
+        System.out.println(ByteUtils.byteArrays2int16s(rule1_1, 4));
+
+        System.out.println(ByteUtils.byteArrays2string(rule1_1[0]));
+        System.out.println(ByteUtils.int8_2byteArrays(rule1_1[0]));
+
+        for (byte item: rule1_1) {
+            System.out.println(ByteUtils.byteArrays2string(item));
+        }
+        //结束
+        assertEquals(4, 2 + 2);
+    }
+
+    /**位处理 */
+    public void byteDisplay(){
         byte b = 0;// 0000 0000
         System.out.println(byte2string(b));
 
@@ -26,10 +53,9 @@ public class ByteUnitTest {
         System.out.println(byte2string(b));
 
         b = (byte) 255;
-        System.out.printf(String.valueOf((b&0xff)));
-        assertEquals(4, 2 + 2);
-    }
+        System.out.println(String.valueOf((b&0xff)));
 
+    }
 
     /** byte 转 二进制字符串*/
     public String byte2string(byte b){
