@@ -18,6 +18,8 @@ import java.net.UnknownHostException;
 
 public class TestSocketActivity extends AppCompatActivity {
 
+    public static final String ip = "10.9.254.41";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +30,6 @@ public class TestSocketActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, MySocketService.class);
         serviceIntent.putExtra(MySocketService.PORT_KEY,MySocketService.port);
         startService(serviceIntent);
-        try {
-            inetAddress = InetAddress.getByName("192.168.61.247");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
     }
 
     @Subscribe()
@@ -46,8 +43,7 @@ public class TestSocketActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    InetAddress inetAddress;
     public void send(View view) {
-        EventBus.getDefault().post(new SocketWrite("192.168.61.247", "asdsadsad".getBytes()));
+        EventBus.getDefault().post(new SocketWrite(ip, "asdsadsad".getBytes()));
     }
 }
