@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
+ * 日志管理类
  * Created by a3552 on 2017/4/17.
  */
 
