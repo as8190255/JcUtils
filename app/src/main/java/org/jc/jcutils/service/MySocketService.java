@@ -7,9 +7,9 @@ import android.os.IBinder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jc.jcutils.javabean.SocketWrite;
-import org.jc.jcutils.javabean.TestBean;
+import org.jc.jcutils.ui.javabean.SocketWrite;
 import org.jc.jcutils.utils.MyLog;
+import org.jc.jcutils.utils.RuleDisplayUtils;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -107,12 +107,12 @@ public class MySocketService extends Service {
             while (life){
                 try {
                     mSocket.receive(acceptPacket);
-                    MyLog.i("Socket:接受到数据长度 " + acceptPacket.getLength());
+                    MyLog.i("Socket:接受到数据长度 " + acceptPacket.getLength()+" "+acceptPacket.getAddress().getHostName());
                     if (acceptPacket!=null && acceptPacket.getLength()>0){
                         byte[] result;
                         result = Arrays.copyOf(acceptPacket.getData(), acceptPacket.getLength());
                         //底层协议 byte[]前位数判断请求类型
-                        EventBus.getDefault().post(new TestBean(result));
+                        RuleDisplayUtils.display(acceptPacket.getAddress().getAddress(), acceptPacket.getPort(), result);
                     }
                 } catch (IOException e) {
                     MyLog.e("Socket:接收数据异常", e);
@@ -122,6 +122,7 @@ public class MySocketService extends Service {
 
         /** 发送消息*/
         public void write(InetAddress inetAddress, byte[] data){
+            MyLog.i("Socket:消息发送:"+ data.length);
             DatagramPacket datagramPacket = new DatagramPacket(data, data.length, inetAddress, port);
             try {
                 this.mSocket.send(datagramPacket);
