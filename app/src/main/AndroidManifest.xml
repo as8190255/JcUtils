@@ -22,7 +22,7 @@
         <activity android:name=".ui.control.ConnectPhoneActivity" />
 
         <service
-            android:name=".ui.service.MySocketService"
+            android:name=".service.MySocketService"
             android:enabled="true"
             android:exported="true" />
 

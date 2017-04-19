@@ -1,4 +1,4 @@
-package org.jc.jcutils.ui.service;
+package org.jc.jcutils.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -7,8 +7,8 @@ import android.os.IBinder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jc.jcutils.ui.javabean.SocketWrite;
-import org.jc.jcutils.ui.javabean.TestBean;
+import org.jc.jcutils.javabean.SocketWrite;
+import org.jc.jcutils.javabean.TestBean;
 import org.jc.jcutils.utils.MyLog;
 
 import java.io.IOException;

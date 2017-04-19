@@ -8,13 +8,10 @@ import android.view.View;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.jc.jcutils.R;
-import org.jc.jcutils.ui.javabean.SocketWrite;
-import org.jc.jcutils.ui.javabean.TestBean;
-import org.jc.jcutils.ui.service.MySocketService;
+import org.jc.jcutils.javabean.SocketWrite;
+import org.jc.jcutils.javabean.TestBean;
+import org.jc.jcutils.service.MySocketService;
 import org.jc.jcutils.utils.MyLog;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class TestSocketActivity extends AppCompatActivity {
 

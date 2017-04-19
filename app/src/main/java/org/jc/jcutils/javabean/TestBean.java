@@ -1,4 +1,4 @@
-package org.jc.jcutils.ui.javabean;
+package org.jc.jcutils.javabean;
 
 /**
  * 接受消息
