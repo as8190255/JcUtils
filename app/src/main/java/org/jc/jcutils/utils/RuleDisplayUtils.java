@@ -1,7 +1,9 @@
 package org.jc.jcutils.utils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.jc.jcutils.ui.javabean.Rule65_3Result;
+import org.jc.jcutils.javabean.Rule65_3Result;
+import org.jc.jcutils.javabean.Rule65_4Result;
+import org.jc.jcutils.javabean.Rule65_5Result;
 
 /**
  * 协议处理区域
@@ -19,7 +21,11 @@ public class RuleDisplayUtils {
      */
     public static void display(byte[] ip, int port, byte[] data){
         if (isRule(data, Rule65_3Result.rule)){
-            EventBus.getDefault().post(new Rule65_3Result());
+            Rule65_3Result.run();
+        }else if (isRule(data, Rule65_4Result.rule)){
+            Rule65_4Result.run();
+        }else if (isRule(data, Rule65_5Result.rule)){
+            Rule65_5Result.run();
         }
     }
 

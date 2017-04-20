@@ -7,4 +7,8 @@ package org.jc.jcutils.javabean;
 
 public class Rule65_2Result {
     public static final byte[] rule = new byte[]{65, 2};
+
+    public static void run(){
+
+    }
 }

@@ -8,11 +8,39 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 /**
  * ShellUtils
  */
 public class ShellUtils {
+
+
+    /**
+     * Shell命令执行方法
+     * @param cmd 命令内容
+     */
+    public static void execShellCmd(String cmd) {
+        try {
+            // 申请获取root权限，这一步很重要，不然会没有作用
+            Process process = Runtime.getRuntime().exec("su");
+            // 获取输出流
+            OutputStream outputStream = process.getOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(
+                    outputStream);
+            dataOutputStream.writeBytes(cmd);
+            dataOutputStream.flush();
+            dataOutputStream.close();
+            outputStream.close();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
+
+
+//---------------------------------------------------------------------------------------------------
+
 
     public static final String COMMAND_SU = "su";
     public static final String COMMAND_SH = "sh";
