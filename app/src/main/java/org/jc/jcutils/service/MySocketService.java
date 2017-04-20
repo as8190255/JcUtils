@@ -7,7 +7,7 @@ import android.os.IBinder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jc.jcutils.ui.javabean.SocketWrite;
+import org.jc.jcutils.javabean.SocketWrite;
 import org.jc.jcutils.utils.MyLog;
 import org.jc.jcutils.utils.RuleDisplayUtils;
 
