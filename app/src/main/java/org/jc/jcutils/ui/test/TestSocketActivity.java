@@ -29,6 +29,7 @@ public class TestSocketActivity extends AppCompatActivity {
         serviceIntent.putExtra(MySocketService.PORT_KEY,MySocketService.port);
         startService(serviceIntent);
 //        startActivity(new Intent(this, MainActivity.class));
+
     }
 
     @Subscribe()

@@ -1,7 +1,9 @@
 package org.jc.jcutils.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 
 import org.greenrobot.eventbus.EventBus;
@@ -18,6 +20,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.Date;
 
 public class MySocketService extends Service {
     public static final String PORT_KEY = "jc_socket_port";
@@ -55,7 +58,31 @@ public class MySocketService extends Service {
             }
         }
         connetSocket();
+
+        if (aaa == null){
+            aaa = new TheadLog();
+            aaa.start();
+        }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    TheadLog aaa ;
+    public class TheadLog extends Thread{
+        @Override
+        public void run() {
+            super.run();
+            SharedPreferences sharedPreferences = getSharedPreferences("applog", Context.MODE_PRIVATE);
+            sharedPreferences.edit().putString("timeStart",new Date().toString());
+            while (true){
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                SharedPreferences sharedPreferences2 = getSharedPreferences("applog", Context.MODE_PRIVATE);
+                sharedPreferences2.edit().putString("timeLog",new Date().toString());
+            }
+        }
     }
 
     /** 连接*/
@@ -70,6 +97,7 @@ public class MySocketService extends Service {
         socketThread.start();
     }
 
+    @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void writeData(SocketWrite bean){
         if (mSocket == null || mSocket.isClosed()){

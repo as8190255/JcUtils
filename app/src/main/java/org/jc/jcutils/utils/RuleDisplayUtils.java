@@ -1,6 +1,8 @@
 package org.jc.jcutils.utils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jc.jcutils.javabean.Rule65_1Result;
+import org.jc.jcutils.javabean.Rule65_2Result;
 import org.jc.jcutils.javabean.Rule65_3Result;
 import org.jc.jcutils.javabean.Rule65_4Result;
 import org.jc.jcutils.javabean.Rule65_5Result;
@@ -20,7 +22,11 @@ public class RuleDisplayUtils {
      * @param data 发送信息体
      */
     public static void display(byte[] ip, int port, byte[] data){
-        if (isRule(data, Rule65_3Result.rule)){
+        if (isRule(data, Rule65_1Result.rule)){
+            Rule65_1Result.run(data);
+        }else if (isRule(data, Rule65_2Result.rule)){
+            Rule65_2Result.run(data);
+        }else if (isRule(data, Rule65_3Result.rule)){
             Rule65_3Result.run();
         }else if (isRule(data, Rule65_4Result.rule)){
             Rule65_4Result.run();
