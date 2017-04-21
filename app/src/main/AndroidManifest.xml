@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -34,15 +36,24 @@
 
         <activity
             android:name=".ui.test.TestSocketActivity"
-            android:label="测试socket"></activity>
+            android:label="测试socket" />
         <activity android:name=".ui.controlled.Controlled2Activity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".ui.control.Control2Activity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".ui.control.Control2Activity">
+        <activity android:name=".ui.test.ScreenshotTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
