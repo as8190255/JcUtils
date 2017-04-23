@@ -21,14 +21,19 @@ import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
+import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.media.projection.MediaProjection;
 import android.util.Log;
 import android.view.Surface;
 
+import org.greenrobot.eventbus.EventBus;
+import org.jc.jcutils.javabean.H264_Send;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -36,6 +41,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ScreenRecorder extends Thread {
     private static final String TAG = "ScreenRecorder";
+
+    //ScreenRecord类中的final值
+    private static final int FLV_VIDEO_TAG_LENGTH = 5;
+    private static final int NALU_HEADER_LENGTH = 4;
 
     private int mWidth;
     private int mHeight;
@@ -116,11 +125,10 @@ public class ScreenRecorder extends Thread {
                 Log.d(TAG, "retrieving buffers time out!");
                 try {
                     // wait 10ms
-                    Thread.sleep(10);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                 }
             } else if (index >= 0) {//数据正常
-
                 if (!mMuxerStarted) {
                     throw new IllegalStateException("MediaMuxer dose not call addTrack(format) ");
                 }
@@ -135,6 +143,16 @@ public class ScreenRecorder extends Thread {
     /** 数据编码*/
     private void encodeToVideoTrack(int index) {
         ByteBuffer encodedData = mEncoder.getOutputBuffer(index);
+        final int endOfStream = mBufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM;
+        if (endOfStream == 0){
+            //传递编码数据
+//            if (mBufferInfo.size==26){
+//                byte [] asd = new byte[mBufferInfo.size];
+//                encodedData.get(asd,0,mBufferInfo.size);
+//                EventBus.getDefault().post(new H264_Send(asd));
+//                MyLog.i("发现编码帧："+ Arrays.toString(asd));
+//            }
+        }
 
         if ((mBufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
             // The codec config data was pulled out and fed to the muxer when we got
@@ -155,9 +173,43 @@ public class ScreenRecorder extends Thread {
             encodedData.position(mBufferInfo.offset);
             encodedData.limit(mBufferInfo.offset + mBufferInfo.size);
             //写到本地
-            mMuxer.writeSampleData(mVideoTrackIndex, encodedData, mBufferInfo);
+            //mMuxer.writeSampleData(mVideoTrackIndex, encodedData, mBufferInfo);
             Log.i(TAG, "sent " + mBufferInfo.size + " bytes to muxer...");
+            //测试代码
+            //时间 (mBufferInfo.presentationTimeUs / 1000) - startTime
+            testData(encodedData);
         }
+    }
+
+    public void testData(ByteBuffer encodedData){
+        int readDataLength = encodedData.remaining();
+        byte [] finalBuff = new byte[readDataLength];
+        encodedData.get(finalBuff, 0, readDataLength);
+        if (finalBuff != null && finalBuff.length>0){
+            EventBus.getDefault().post(new H264_Send(finalBuff));
+//            if (readDataLength>65535){
+//                byte[]b1=new byte[65535];
+//                byte[]b2=new byte[readDataLength - 65535];
+//                byte[] b3 = Arrays.copyOfRange(finalBuff, 65535, readDataLength - 65535);
+//                EventBus.getDefault().post(new H264_Send(b2));
+//                EventBus.getDefault().post(new H264_Send(b3));
+//                //b2 = Arrays.copyOf(finalBuff, 65535, readDataLength - 65535);
+////                int len = readDataLength;
+////                int num = readDataLength / 65535;
+////                int yushu = readDataLength % 65535;
+////                num += yushu > 0 ? 1 : 0;
+////                for (int i = 0; i < num; i++) {
+////                    byte
+////                }
+//            }else {
+//                EventBus.getDefault().post(new H264_Send(finalBuff));
+//            }
+        }
+
+//        int packetLen = FLV_VIDEO_TAG_LENGTH + NALU_HEADER_LENGTH +readDataLength;
+//        byte [] finalBuff = new byte[packetLen];
+//        encodedData.get(finalBuff, FLV_VIDEO_TAG_LENGTH + NALU_HEADER_LENGTH, readDataLength);
+//        int frameType = finalBuff[FLV_VIDEO_TAG_LENGTH + NALU_HEADER_LENGTH +readDataLength] & 0x1F;
     }
 
     private void resetOutputFormat() {

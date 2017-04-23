@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.jc.jcutils.R;
+import org.jc.jcutils.service.MySocketService;
 import org.jc.jcutils.utils.ScreenRecorder;
 
 import java.io.File;
@@ -29,6 +30,8 @@ public class ScreenshotTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screenshot_test);
         mMediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+
+        startService(new Intent(this, MySocketService.class));
     }
 
     public void onScreenshot(View view) {
@@ -47,8 +50,8 @@ public class ScreenshotTestActivity extends AppCompatActivity {
 //        super.onActivityResult(requestCode, resultCode, data);
         MediaProjection mediaProjection = mMediaProjectionManager.getMediaProjection(resultCode, data);
         if (mediaProjection == null)return;
-        final int width = 1280;
-        final int height = 720;
+        final int width = 720;
+        final int height = 1080;
         File file = new File(Environment.getExternalStorageDirectory(),
                 "record-"+width+"x"+height+"-"+System.currentTimeMillis()+".mp4");
         final int bitrate = 6000000;

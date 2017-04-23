@@ -150,12 +150,28 @@ public class MySocketService extends Service {
 
         /** 发送消息*/
         public void write(InetAddress inetAddress, byte[] data){
-            MyLog.i("Socket:消息发送:"+ data.length);
-            DatagramPacket datagramPacket = new DatagramPacket(data, data.length, inetAddress, port);
-            try {
-                this.mSocket.send(datagramPacket);
-            } catch (IOException e) {
-                MyLog.e("Socket:消息发送失败", e);
+            if (data.length <= 65534){
+                MyLog.i("Socket:消息发送:"+ data.length);
+                DatagramPacket datagramPacket = new DatagramPacket(data, data.length, inetAddress, port);
+                try {
+                    this.mSocket.send(datagramPacket);
+                } catch (IOException e) {
+                    MyLog.e("Socket:消息发送失败", e);
+                }
+            }else {
+//                MyLog.i("Socket:消息发送:"+ data.length);
+//                int readDataLength = data.length;
+//                byte[] b2 =Arrays.copyOf(data,65507);
+//                byte[] b3 = Arrays.copyOfRange(data, 65507, readDataLength);
+//
+//                DatagramPacket datagramPacket = new DatagramPacket(b2, b2.length, inetAddress, port);
+//                DatagramPacket datagramPacket2 = new DatagramPacket(b3, readDataLength - 65507, inetAddress, port);
+//                try {
+//                    this.mSocket.send(datagramPacket);
+//                    this.mSocket.send(datagramPacket2);
+//                } catch (IOException e) {
+//                    MyLog.e("Socket:消息发送失败", e);
+//                }
             }
         }
     }
