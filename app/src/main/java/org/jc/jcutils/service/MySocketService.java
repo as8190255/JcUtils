@@ -150,7 +150,7 @@ public class MySocketService extends Service {
 
         /** 发送消息*/
         public void write(InetAddress inetAddress, byte[] data){
-            if (data.length <= 65534){
+            if (data.length <= 60000){
                 MyLog.i("Socket:消息发送:"+ data.length);
                 DatagramPacket datagramPacket = new DatagramPacket(data, data.length, inetAddress, port);
                 try {
@@ -159,8 +159,26 @@ public class MySocketService extends Service {
                     MyLog.e("Socket:消息发送失败", e);
                 }
             }else {
-//                MyLog.i("Socket:消息发送:"+ data.length);
-//                int readDataLength = data.length;
+                MyLog.i("Socket:消息发送:"+ data.length + " 分包发送");
+                int readDataLength = data.length;
+                int num = readDataLength / 60000 + ((readDataLength % 60000 ) > 0 ? 1 : 0);
+                for (int i = 0; i < num; i++) {
+                    byte [] b ;
+                    if (i < (num-1)){
+                        b = Arrays.copyOfRange(data, i * 60000, (i + 1) * 60000);
+                    }else {
+                        b = Arrays.copyOfRange(data, i * 60000, data.length);
+                    }
+                    DatagramPacket datagramPacket = new DatagramPacket(b, b.length, inetAddress, port);
+                    try {
+                        this.mSocket.send(datagramPacket);
+                        MyLog.i("Socket:分包消息"+i+": "+b.length);
+                    } catch (IOException e) {
+//                        e.printStackTrace();
+                        MyLog.e("Socket:分包消息发送失败", e);
+                    }
+                }
+
 //                byte[] b2 =Arrays.copyOf(data,65507);
 //                byte[] b3 = Arrays.copyOfRange(data, 65507, readDataLength);
 //

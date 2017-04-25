@@ -10,4 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.jc.jcutils.ui.test.rtmp.VideoShow2Activity">
 
+    <Button
+        android:text="回发"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="155dp"
+        android:id="@+id/button9"
+        android:onClick="send" />
 </RelativeLayout>

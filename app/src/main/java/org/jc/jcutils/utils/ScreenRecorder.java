@@ -187,29 +187,7 @@ public class ScreenRecorder extends Thread {
         encodedData.get(finalBuff, 0, readDataLength);
         if (finalBuff != null && finalBuff.length>0){
             EventBus.getDefault().post(new H264_Send(finalBuff));
-//            if (readDataLength>65535){
-//                byte[]b1=new byte[65535];
-//                byte[]b2=new byte[readDataLength - 65535];
-//                byte[] b3 = Arrays.copyOfRange(finalBuff, 65535, readDataLength - 65535);
-//                EventBus.getDefault().post(new H264_Send(b2));
-//                EventBus.getDefault().post(new H264_Send(b3));
-//                //b2 = Arrays.copyOf(finalBuff, 65535, readDataLength - 65535);
-////                int len = readDataLength;
-////                int num = readDataLength / 65535;
-////                int yushu = readDataLength % 65535;
-////                num += yushu > 0 ? 1 : 0;
-////                for (int i = 0; i < num; i++) {
-////                    byte
-////                }
-//            }else {
-//                EventBus.getDefault().post(new H264_Send(finalBuff));
-//            }
         }
-
-//        int packetLen = FLV_VIDEO_TAG_LENGTH + NALU_HEADER_LENGTH +readDataLength;
-//        byte [] finalBuff = new byte[packetLen];
-//        encodedData.get(finalBuff, FLV_VIDEO_TAG_LENGTH + NALU_HEADER_LENGTH, readDataLength);
-//        int frameType = finalBuff[FLV_VIDEO_TAG_LENGTH + NALU_HEADER_LENGTH +readDataLength] & 0x1F;
     }
 
     private void resetOutputFormat() {

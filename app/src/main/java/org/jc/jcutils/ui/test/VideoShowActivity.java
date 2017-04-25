@@ -21,7 +21,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 显示视频
@@ -116,11 +118,13 @@ public class VideoShowActivity extends AppCompatActivity implements SurfaceHolde
             decoder.start();
         }
         boolean isNext = true;
-        byte [] temp = new byte[0];
+        List<byte[]> temp;//分包缓存数据
         @Override
         public void run() {
             super.run();
             init();
+
+            temp = new ArrayList<>();
 
             while (isNext){
                 try {
@@ -130,16 +134,18 @@ public class VideoShowActivity extends AppCompatActivity implements SurfaceHolde
                         byte [] result;
                         result = Arrays.copyOf(mPacket.getData(), mPacket.getLength());
                         MyLog.i("接收到视频数据:"+result.length);
-                        if (result.length>=65535){//分包处理
-                            temp = result;
+                        if (result.length>=60000){//分包处理
+                            byte[] tempByte = Arrays.copyOf(mPacket.getData(), mPacket.getLength());
+                            temp.add(tempByte);
                             continue;
                         }else {
-                            if (temp != null && temp.length==65535){
-                                byte [] bb = new byte[65535 + result.length];
-                                System.arraycopy(temp, 0, bb, 0, temp.length);
-                                System.arraycopy(result, 0, bb, temp.length, result.length);
-                                result = bb;
-                                temp = null;
+                            if (temp.size()>0){
+                                byte [] resultTemp = new byte[0];
+                                for (int i = 0; i < temp.size() - 1; i++) {
+                                    resultTemp = byteMerger(temp.get(i), temp.get(i+1));
+                                }
+                                result = byteMerger(resultTemp, Arrays.copyOf(mPacket.getData(), mPacket.getLength()));
+                                temp.clear();
                             }
                         }
                         ByteBuffer buffer = decoder.getInputBuffer(inIndex);
@@ -187,5 +193,10 @@ public class VideoShowActivity extends AppCompatActivity implements SurfaceHolde
 
     }
 
-
+    public static byte[] byteMerger(byte[] byte_1, byte[] byte_2) {
+        byte[] byte_3 = new byte[byte_1.length + byte_2.length];
+        System.arraycopy(byte_1, 0, byte_3, 0, byte_1.length);
+        System.arraycopy(byte_2, 0, byte_3, byte_1.length, byte_2.length);
+        return byte_3;
+    }
 }
