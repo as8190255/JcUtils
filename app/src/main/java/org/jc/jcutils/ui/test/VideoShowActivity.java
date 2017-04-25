@@ -72,7 +72,7 @@ public class VideoShowActivity extends AppCompatActivity implements SurfaceHolde
         private MediaCodec decoder;
         MediaFormat format;
         MediaCodec.BufferInfo mBufferInfo;
-        byte[] data = new byte[10240000];
+        byte[] data = new byte[100000];
         SurfaceHolder holder;
         public VideoThread(SurfaceHolder holder) {
             this.holder=holder;
@@ -127,8 +127,9 @@ public class VideoShowActivity extends AppCompatActivity implements SurfaceHolde
             temp = new ArrayList<>();
 
             while (isNext){
+                long t = TIMEOUT_US;
                 try {
-                    int inIndex = decoder.dequeueInputBuffer(TIMEOUT_US);
+                    int inIndex = decoder.dequeueInputBuffer(t);
                     if (inIndex >= 0){
                         mSocket.receive(mPacket);
                         byte [] result;
@@ -137,7 +138,8 @@ public class VideoShowActivity extends AppCompatActivity implements SurfaceHolde
                         if (result.length>=60000){//分包处理
                             byte[] tempByte = Arrays.copyOf(mPacket.getData(), mPacket.getLength());
                             temp.add(tempByte);
-                            continue;
+                            //缺
+//                            decoder.releaseOutputBuffer(inIndex, true);
                         }else {
                             if (temp.size()>0){
                                 byte [] resultTemp = new byte[0];
@@ -168,6 +170,7 @@ public class VideoShowActivity extends AppCompatActivity implements SurfaceHolde
                         outIndex = decoder.dequeueOutputBuffer(mBufferInfo, TIMEOUT_US);
                     }
                 } catch (IOException e) {
+                    MyLog.e("ioe", e);
                 }
             }
         }

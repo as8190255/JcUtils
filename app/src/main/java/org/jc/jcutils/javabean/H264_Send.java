@@ -8,6 +8,6 @@ package org.jc.jcutils.javabean;
 public class H264_Send extends SocketWrite{
 
     public H264_Send(byte[] data) {
-        super("192.168.61.247", data);
+        super("192.168.61.164", data);
     }
 }
