@@ -25,8 +25,8 @@ import java.util.Date;
 public class MySocketService extends Service {
     public static final String PORT_KEY = "jc_socket_port";
 
-//    public static int port = 35642;
-    public static int port = 35555;
+    public static int port = 35642;
+//    public static int port = 35555;
     private byte[] msg = new byte[1024];
     private boolean life = true;
 
