@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.jc.jcutils.R;
 import org.jc.jcutils.javabean.CustomStr_Send;
 import org.jc.jcutils.service.MySocketService;
+import org.jc.jcutils.utils.ShellUtils;
 
 /**
  * 被控端页面
@@ -44,6 +46,8 @@ public class Controlled2Activity extends AppCompatActivity {
                 EventBus.getDefault().post(new CustomStr_Send("10.9.254.41","123112"));
             }
         });
+
+//        ShellUtils.execShellCmd("screencap -p "+ Environment.getExternalStorageDirectory() + "/screen.png");
     }
 
     /**获取本机WIFI的IP地址 */
